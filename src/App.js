@@ -11,7 +11,7 @@ export default class App extends React.Component {
       task: []
     }
     this.submitHandler = this.submitHandler.bind(this)
-  }
+ }
 
   submitHandler(event) {
     event.preventDefault();
@@ -19,6 +19,19 @@ export default class App extends React.Component {
     this.setState((prevState) => {
     return {task: [...prevState.task, {name: prevState.name, lastname: prevState.lastname, date: prevState.date}], name: '', lastname: '', date: ''}})
   }
+
+  submitDelete = (index) => {
+      this.setState((prevState) => {
+      const newTasks = prevState.task.filter((task, id) => {
+        return id !== index
+      })
+      
+      return{
+        task: newTasks
+      }
+     })
+    }
+  
 
 render() {
     
@@ -31,13 +44,13 @@ render() {
     onChange={(event) => {this.setState({lastname: event.target.value})}}/>
     <input type="text" value={this.state.date}
     onChange={(event) => {this.setState({date: event.target.value})}}/>
-   <button type="submit">Submit</button>
+   <button type="submit">Add</button>
   </form>
   <ul>
        {this.state.task.map((task, index) => {
-         return <Patient key={index} name={task.name} lastname={task.lastname} date={task.date}/>
+         return <Patient key={index} index={task.index} name={task.name} lastname={task.lastname} date={task.date} submitDelete={this.submitDelete}/>
        })}
-     </ul>
+  </ul>
    </>
   )
 }
