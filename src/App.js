@@ -48,7 +48,7 @@ render() {
   </form>
   <ul>
        {this.state.task.map((task, index) => {
-         return <Patient key={index} index={task.index} name={task.name} lastname={task.lastname} date={task.date} submitDelete={this.submitDelete}/>
+         return <Patient key={index} index={index} name={task.name} lastname={task.lastname} date={task.date} submitDelete={this.submitDelete}/>
        })}
   </ul>
    </>
