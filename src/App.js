@@ -1,60 +1,36 @@
-import React from "react";
-import Patient from "./components/Patient";
+import { useState } from "react";
+import NewPatient from "./components/NewPatient";
+import Patient from "./components/Patient"
+import PatientsList from "./components/PatientsList";
 
-export default class App extends React.Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      name: '',
-      lastname: '',
-      date: '',
-      task: []
-    }
-    this.submitHandler = this.submitHandler.bind(this)
- }
+export default function App() {
 
-  submitHandler(event) {
-    event.preventDefault();
-    if (this.state.name !== '')
-    this.setState((prevState) => {
-    return {task: [...prevState.task, {name: prevState.name, lastname: prevState.lastname, date: prevState.date}], name: '', lastname: '', date: ''}})
-  }
-
-  submitDelete = (index) => {
-      this.setState((prevState) => {
-      const newTasks = prevState.task.filter((task, id) => {
-        return id !== index
-      })
-      
-      return{
-        task: newTasks
-      }
-     })
-    }
-  
-
-render() {
+    const startPatients = []
+    //setPatients функция, которая меняет состояние в переменной patients и запускает render
+    //useState это hook создает переменную состояния и callback, который меняет это состояние
+    const [patients, setPatients] = useState(startPatients)
     
-  return (
-    <>
-  <form onSubmit={this.submitHandler}>
-    <input type="text" value={this.state.name} 
-    onChange={(event) => {this.setState({name: event.target.value})}}/>
-    <input type="text" value={this.state.lastname}
-    onChange={(event) => {this.setState({lastname: event.target.value})}}/>
-    <input type="text" value={this.state.date}
-    onChange={(event) => {this.setState({date: event.target.value})}}/>
-   <button type="submit">Add</button>
-  </form>
-  <ul>
-       {this.state.task.map((task, index) => {
-         return <Patient key={index} index={index} name={task.name} lastname={task.lastname} date={task.date} submitDelete={this.submitDelete}/>
-       })}
-  </ul>
-   </>
-  )
+    
+    function submitDelete(index) {
+
+        const newPatients = patients.filter((patient, id) => {
+            return id !== index
+        })
+
+        setPatients(newPatients)
+    }
+
+    const addPatient = (newPatient) => {
+        setPatients([...patients, newPatient])
+       }
+
+    
+    return (
+        <>
+          <NewPatient addPatient={addPatient}/>
+        <PatientsList patients={patients} submitDelete={submitDelete}/>
+        </>
+    )
+
+
 }
-}
-
-
-
